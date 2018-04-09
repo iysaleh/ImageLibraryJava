@@ -65,6 +65,8 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         changeResolutionMenu = new javax.swing.JMenuItem();
         changePixelDepthMenu = new javax.swing.JMenuItem();
 
+        fileChooser.setCurrentDirectory(new File("./images"));
+
         changeResolutionChooser.setMinimumSize(new java.awt.Dimension(600, 300));
 
         changeResolutionAcceptButton.setText("Accept");
@@ -84,6 +86,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         interpolationMethodChoice.add("Nearest Neighbor");
         interpolationMethodChoice.add("Linear");
         interpolationMethodChoice.add("Bilinear");
+        interpolationMethodChoice.select("Linear");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Select Interpolation Method:");
@@ -238,8 +241,12 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jScrollPane1.setViewportView(leftImageLabel);
+        leftImageLabel.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+        leftImageLabel.setVerticalAlignment(javax.swing.JLabel.CENTER);
 
         jScrollPane2.setViewportView(rightImageLabel);
+        rightImageLabel.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+        rightImageLabel.setVerticalAlignment(javax.swing.JLabel.CENTER);
 
         acceptTransformationButton.setText("Accept Transformation");
         acceptTransformationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -358,6 +365,10 @@ public class ImageLibraryUI extends javax.swing.JFrame {
     }//GEN-LAST:event_openImageActionPerformed
 
     private void changeResolutionMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeResolutionMenuActionPerformed
+        if(leftImage != null){
+            changeResolutionWidth.setText(leftImage.getWidth()+"");
+            changeResolutionHeight.setText(leftImage.getHeight()+"");
+        }
         changeResolutionChooser.setVisible(true);
     }//GEN-LAST:event_changeResolutionMenuActionPerformed
 
@@ -387,10 +398,12 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 //changeResolutionChooser.setVisible(false);
                 break;
             case "Linear":
-                System.out.println("linear");
+                rightImage = ImageLibrary.linearInterpolation(leftImage,newWidth,newHeight);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             case "Bilinear":
-                System.out.println("bilinear");
+                rightImage = ImageLibrary.bilinearInterpolation(leftImage,newWidth,newHeight);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             default:
                 break;

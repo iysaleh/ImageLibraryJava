@@ -26,21 +26,18 @@
                           <Component id="jLabel1" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="interpolationMethodChoice" min="-2" pref="269" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="changeResolutionWidth" alignment="0" max="-2" attributes="0"/>
-                          <Component id="changeResolutionHeight" alignment="0" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="changeResolutionWidth" alignment="0" max="-2" attributes="0"/>
+                      <Component id="changeResolutionHeight" alignment="0" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
               </Group>
@@ -110,7 +107,7 @@
         </Component>
         <Component class="java.awt.Choice" name="interpolationMethodChoice">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="interpolationMethodChoice.add(&quot;Nearest Neighbor&quot;);&#xa;interpolationMethodChoice.add(&quot;Linear&quot;);&#xa;interpolationMethodChoice.add(&quot;Bilinear&quot;);&#xa;interpolationMethodChoice.select(&quot;Linear&quot;);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="interpolationMethodChoice.add(&quot;Nearest Neighbor&quot;);&#xa;interpolationMethodChoice.add(&quot;LinearX&quot;);&#xa;interpolationMethodChoice.add(&quot;LinearY&quot;);&#xa;interpolationMethodChoice.add(&quot;Bilinear&quot;);&#xa;interpolationMethodChoice.select(&quot;Nearest Neighbot&quot;);"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">

@@ -171,7 +171,8 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        changePixelDepthChooser.setMinimumSize(new java.awt.Dimension(600, 300));
+        changePixelDepthChooser.setMaximumSize(new java.awt.Dimension(450, 200));
+        changePixelDepthChooser.setMinimumSize(new java.awt.Dimension(450, 200));
 
         changePixelDepthAcceptButton.setText("Accept");
         changePixelDepthAcceptButton.addActionListener(new java.awt.event.ActionListener() {

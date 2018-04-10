@@ -182,14 +182,52 @@ public class ImageLibrary {
         WritableRaster raster = src.copyData(src.getRaster().createCompatibleWritableRaster());
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
+    
+   /**
+     * Copy a file from source to destination.
+     *
+     * Code Taken from: https://stackoverflow.com/questions/10308221/how-to-copy-file-inside-jar-to-outside-the-jar
+     * 
+     * @param source
+     *        the source
+     * @param destination
+     *        the destination
+     * @return True if succeeded , False if not
+     */
+    public static boolean copy(java.io.InputStream source , String destination) {
+        boolean succeess = true;
+
+        System.out.println("Copying ->" + source + "\n\tto ->" + destination);
+
+        try {
+            java.io.File file = new java.io.File(destination);
+            file.mkdirs();
+            java.nio.file.Files.copy(source, java.nio.file.Paths.get(destination), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (java.io.IOException ex) {
+            succeess = false;
+        }
+
+        return succeess;
+
+    }
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
         ImageLibraryUI userInterface = new ImageLibraryUI();
         userInterface.main(args);
+        
+        //Copy the demo lena image into the images directory for convenience
+        try{
+            copy(ImageLibrary.class.getResourceAsStream("lena.gif"),java.nio.file.Paths.get(".").toAbsolutePath().normalize().toString()+java.io.File.separator+"images"+java.io.File.separator+"lena.gif");
+            
+        }
+        catch(Exception e)
+        {
+            //Copying the resource didn't work. Guess you'll have to supply the image yourself!
+        }
     }
-    
 }
 
 

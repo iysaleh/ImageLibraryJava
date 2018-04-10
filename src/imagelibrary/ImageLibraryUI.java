@@ -466,7 +466,6 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 new ImageLibraryUI().setVisible(true);
             }
         });
-        System.out.println("HELLO222");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

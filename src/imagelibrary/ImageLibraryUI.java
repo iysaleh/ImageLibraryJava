@@ -196,7 +196,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         });
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setText("Input New Pixel Depth (bits):");
+        jLabel6.setText("Select Pixel Bitplane Slice (bit):");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel7.setText("Change Pixel Depth Menu");

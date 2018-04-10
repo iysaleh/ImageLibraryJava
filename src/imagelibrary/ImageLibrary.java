@@ -21,11 +21,13 @@ public class ImageLibrary {
     public static BufferedImage loadGrayscaleImage(File file) throws Exception
     {
         BufferedImage src = ImageIO.read(file);
+        //Create a placedholder BufferedImage object which operates in the grayscale domain.
         BufferedImage destGray = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
         
         WritableRaster wrSrc = src.getRaster();
         WritableRaster wrDestGray = destGray.getRaster();
         
+        //Copy each sample from the original image into the grayscale domain BufferedImage.
         for(int i=0;i<wrSrc.getWidth();i++){
             for(int j=0;j<wrSrc.getHeight();j++){
                 wrDestGray.setSample(i, j, 0, wrSrc.getSample(i, j, 0));
@@ -67,24 +69,28 @@ public class ImageLibrary {
         WritableRaster wrSrc = src.getRaster();
         WritableRaster wrDst = dst.getRaster();
         
-        //Set the pixel values using nearest neighbor and rounding to the closest value in the src image for the dest image.
         for(int i=0;i<newWidth;i++){
             for(int j=0;j<newHeight;j++){
                 float x = i*widthRatio;
                 float y = j*heightRatio;
-                int x1 = (int) Math.max(Math.min(Math.round(Math.ceil(x))-1,src.getWidth()-1),0);
-                int x2 = (int) Math.max(Math.min(Math.round(Math.ceil(x)),src.getWidth()-1),0);
-                int y1 = (int) Math.max(Math.min(Math.round(Math.ceil(y))-1,src.getHeight()-1),0);
-                int y2 = (int) Math.max(Math.min(Math.round(Math.ceil(y)),src.getHeight()-1),0);
+                //Select the pixel locations for comparison. The src.getWidth()-2 Minimum and 1 Maximum is because we don't deal with edge pixels!
+                int x1 = (int) Math.max(Math.min(Math.round(Math.ceil(x))-1,src.getWidth()-2),0);
+                int x2 = (int) Math.max(Math.min(Math.round(Math.ceil(x)),src.getWidth()-1),1);
+                int y1 = (int) Math.max(Math.min(Math.round(Math.ceil(y))-1,src.getHeight()-2),0);
+                int y2 = (int) Math.max(Math.min(Math.round(Math.ceil(y)),src.getHeight()-1),1);
 
+                //Retrieve the 4-diagonal pixels
                 int pixUL = wrSrc.getSample(x1, y1, 0);
                 int pixUR = wrSrc.getSample(x2, y1, 0);
                 int pixBL = wrSrc.getSample(x1, y2, 0);
                 int pixBR = wrSrc.getSample(x2, y2, 0);
                 
+                //Calculate the interpolated pixel values
                 float xInterpValU = ((x2-x)*pixUL) + ((x-x1)*pixUR);
                 float xInterpValB = ((x2-x)*pixBL) + ((x-x1)*pixBR);
                 float yInterpVal = ((y2-y)*xInterpValU) + ((y-y1)*xInterpValB);
+                
+                //Set the resulting pixel value
                 wrDst.setSample(i, j, 0, (int)yInterpVal);
             }
         }
@@ -103,18 +109,20 @@ public class ImageLibrary {
         WritableRaster wrSrc = src.getRaster();
         WritableRaster wrDst = dst.getRaster();
         
-        //Set the pixel values using nearest neighbor and rounding to the closest value in the src image for the dest image.
         for(int i=0;i<newWidth;i++){
             for(int j=0;j<newHeight;j++){
                 float x = i*widthRatio;
                 float y = j*heightRatio;
-                int x1 = (int) Math.max(Math.min(Math.round(Math.ceil(x))-1,src.getWidth()-1),0);
+                //Select the pixel locations for comparison. The src.getWidth()-2 Minimum and 1 Maximum is because we don't deal with edge pixels!
+                int x1 = (int) Math.max(Math.min(Math.round(Math.ceil(x))-1,src.getWidth()-2),0);
                 int x2 = (int) Math.max(Math.min(Math.round(Math.ceil(x)),src.getWidth()-1),0);
                 int y1 = (int) Math.max(Math.min(Math.round(y),src.getHeight()-1),0);
 
+                //retrieve the pixels along the x-axis
                 int pixL = wrSrc.getSample(x1, y1, 0);
                 int pixR = wrSrc.getSample(x2, y1, 0);
                 
+                //Calculate and set the interpolated pixel value
                 float xInterpValU = ((x2-x)*pixL) + ((x-x1)*pixR);
                 wrDst.setSample(i, j, 0, (int)xInterpValU);
             }
@@ -134,18 +142,20 @@ public class ImageLibrary {
         WritableRaster wrSrc = src.getRaster();
         WritableRaster wrDst = dst.getRaster();
         
-        //Set the pixel values using nearest neighbor and rounding to the closest value in the src image for the dest image.
         for(int i=0;i<newWidth;i++){
             for(int j=0;j<newHeight;j++){
                 float x = i*widthRatio;
                 float y = j*heightRatio;
+                //Select the pixel locations for comparison. The src.getWidth()-2 Minimum and 1 Maximum is because we don't deal with edge pixels!
                 int x1 = (int) Math.max(Math.min(Math.round(x),src.getWidth()-1),0);
-                int y1 = (int) Math.max(Math.min(Math.round(Math.ceil(y))-1,src.getHeight()-1),0);
+                int y1 = (int) Math.max(Math.min(Math.round(Math.ceil(y))-1,src.getHeight()-2),0);
                 int y2 = (int) Math.max(Math.min(Math.round(Math.ceil(y)),src.getHeight()-1),0);
 
+                //retrieve the pixels along the y-axis
                 int pixU = wrSrc.getSample(x1, y1, 0);
                 int pixB = wrSrc.getSample(x1, y2, 0);
 
+                //Calculate and set the interpolated pixel value
                 float yInterpVal = ((y2-y)*pixU) + ((y-y1)*pixB);
                 wrDst.setSample(i, j, 0, (int)yInterpVal);
             }
@@ -156,18 +166,21 @@ public class ImageLibrary {
         return dst;
     }
     
-    public static BufferedImage setPixelDepth(BufferedImage src,int newPixelDepth)
+    public static BufferedImage selectBitplane(BufferedImage src,int bitplane)
     {
         BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
         WritableRaster wrSrc = src.getRaster();
         WritableRaster wrDst = dst.getRaster();
         
-        //Set the pixel values using nearest neighbor and rounding to the closest value in the src image for the dest image.
+        //Calculate the bitplane value
+        int bitmask = (int)Math.pow(2, bitplane);
+        //We want the pixel shift so that we can display the pixels from a bitplane clearly.
+        int pixelShift = Math.max(7-bitplane,0);
+        System.out.println(bitmask);
         for(int i=0;i<src.getWidth();i++){
             for(int j=0;j<src.getHeight();j++){
-                int displayPixelDepth = 8; //No matter what we change the pixel depth to, the displayed/drawn depth of 8 is what we must change our results for.
-                int pixelShift = Math.max(displayPixelDepth-newPixelDepth,0);
-                wrDst.setSample(i, j, 0, wrSrc.getSample(i, j, 0)>>pixelShift<<pixelShift);
+                // bitwise and the bitmask with the src pixel. Shift it to 8th bit position for visibility in the display.
+                wrDst.setSample(i, j, 0, (wrSrc.getSample(i, j, 0) & bitmask)<<pixelShift);
             }
         }
         dst.setData(wrDst);
@@ -184,18 +197,12 @@ public class ImageLibrary {
     }
     
    /**
-     * Copy a file from source to destination.
+     * Copy a file from source to destination. (Used for copying resources embedded in the Jar file)
      *
      * Code Taken from: https://stackoverflow.com/questions/10308221/how-to-copy-file-inside-jar-to-outside-the-jar
-     * 
-     * @param source
-     *        the source
-     * @param destination
-     *        the destination
-     * @return True if succeeded , False if not
      */
     public static boolean copy(java.io.InputStream source , String destination) {
-        boolean succeess = true;
+        boolean success = true;
 
         System.out.println("Copying ->" + source + "\n\tto ->" + destination);
 
@@ -204,10 +211,9 @@ public class ImageLibrary {
             file.mkdirs();
             java.nio.file.Files.copy(source, java.nio.file.Paths.get(destination), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         } catch (java.io.IOException ex) {
-            succeess = false;
+            success = false;
         }
-
-        return succeess;
+        return success;
 
     }
     

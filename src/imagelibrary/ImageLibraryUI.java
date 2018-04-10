@@ -416,7 +416,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
 
     private void changePixelDepthAcceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePixelDepthAcceptButtonActionPerformed
         int newDepth = Integer.parseInt(changePixelDepthField.getText());
-        rightImage = ImageLibrary.setPixelDepth(leftImage, newDepth);
+        rightImage = ImageLibrary.selectBitplane(leftImage, newDepth);
         rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
     }//GEN-LAST:event_changePixelDepthAcceptButtonActionPerformed
 

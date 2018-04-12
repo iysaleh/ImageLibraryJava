@@ -45,12 +45,18 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         changeResolutionHeight = new java.awt.TextField();
+        selectBitplaneChooser = new javax.swing.JDialog();
+        selectBitplaneAcceptButton = new javax.swing.JButton();
+        selectBitplaneDepthCancelButton = new javax.swing.JButton();
+        selectBitplaneField = new java.awt.TextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         changePixelDepthChooser = new javax.swing.JDialog();
         changePixelDepthAcceptButton = new javax.swing.JButton();
         changePixelDepthCancelButton = new javax.swing.JButton();
         changePixelDepthField = new java.awt.TextField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         leftImageLabel = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -64,6 +70,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         transformMenu = new javax.swing.JMenu();
         changeResolutionMenu = new javax.swing.JMenuItem();
         changePixelDepthMenu = new javax.swing.JMenuItem();
+        selectBitplaneMenu = new javax.swing.JMenuItem();
 
         fileChooser.setCurrentDirectory(new File("./images"));
 
@@ -171,6 +178,73 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        selectBitplaneChooser.setMaximumSize(new java.awt.Dimension(450, 200));
+        selectBitplaneChooser.setMinimumSize(new java.awt.Dimension(450, 200));
+
+        selectBitplaneAcceptButton.setText("Accept");
+        selectBitplaneAcceptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectBitplaneAcceptButtonActionPerformed(evt);
+            }
+        });
+
+        selectBitplaneDepthCancelButton.setText("Close");
+        selectBitplaneDepthCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectBitplaneDepthCancelButtonActionPerformed(evt);
+            }
+        });
+
+        selectBitplaneField.setMinimumSize(new java.awt.Dimension(100, 20));
+        selectBitplaneField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectBitplaneFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel6.setText("Select Pixel Bitplane Slice (bit):");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel7.setText("Change Pixel Depth Menu");
+
+        javax.swing.GroupLayout selectBitplaneChooserLayout = new javax.swing.GroupLayout(selectBitplaneChooser.getContentPane());
+        selectBitplaneChooser.getContentPane().setLayout(selectBitplaneChooserLayout);
+        selectBitplaneChooserLayout.setHorizontalGroup(
+            selectBitplaneChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(selectBitplaneChooserLayout.createSequentialGroup()
+                .addGroup(selectBitplaneChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(selectBitplaneChooserLayout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addComponent(selectBitplaneAcceptButton)
+                        .addGap(87, 87, 87)
+                        .addComponent(selectBitplaneDepthCancelButton))
+                    .addGroup(selectBitplaneChooserLayout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addGroup(selectBitplaneChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(selectBitplaneChooserLayout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(selectBitplaneField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        selectBitplaneChooserLayout.setVerticalGroup(
+            selectBitplaneChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(selectBitplaneChooserLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(selectBitplaneChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(selectBitplaneField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(36, 36, 36)
+                .addGroup(selectBitplaneChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(selectBitplaneAcceptButton)
+                    .addComponent(selectBitplaneDepthCancelButton))
+                .addContainerGap())
+        );
+
         changePixelDepthChooser.setMaximumSize(new java.awt.Dimension(450, 200));
         changePixelDepthChooser.setMinimumSize(new java.awt.Dimension(450, 200));
 
@@ -195,11 +269,11 @@ public class ImageLibraryUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setText("Select Pixel Bitplane Slice (bit):");
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel8.setText("Select Pixel Bitplane Slice (bit):");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel7.setText("Change Pixel Depth Menu");
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel9.setText("Change Pixel Depth Menu");
 
         javax.swing.GroupLayout changePixelDepthChooserLayout = new javax.swing.GroupLayout(changePixelDepthChooser.getContentPane());
         changePixelDepthChooser.getContentPane().setLayout(changePixelDepthChooserLayout);
@@ -216,21 +290,21 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                         .addGap(33, 33, 33)
                         .addGroup(changePixelDepthChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(changePixelDepthChooserLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
+                                .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(changePixelDepthField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         changePixelDepthChooserLayout.setVerticalGroup(
             changePixelDepthChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(changePixelDepthChooserLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(changePixelDepthChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(changePixelDepthField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel8))
                 .addGap(36, 36, 36)
                 .addGroup(changePixelDepthChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(changePixelDepthAcceptButton)
@@ -300,6 +374,14 @@ public class ImageLibraryUI extends javax.swing.JFrame {
             }
         });
         transformMenu.add(changePixelDepthMenu);
+
+        selectBitplaneMenu.setText("Select Bitplane");
+        selectBitplaneMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectBitplaneMenuActionPerformed(evt);
+            }
+        });
+        transformMenu.add(selectBitplaneMenu);
 
         jMenuBar1.add(transformMenu);
 
@@ -414,9 +496,31 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_changeResolutionAcceptButtonActionPerformed
 
+    private void selectBitplaneAcceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBitplaneAcceptButtonActionPerformed
+        int newDepth = Integer.parseInt(selectBitplaneField.getText());
+        rightImage = ImageLibrary.selectBitplane(leftImage, newDepth);
+        rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+    }//GEN-LAST:event_selectBitplaneAcceptButtonActionPerformed
+
+    private void selectBitplaneDepthCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBitplaneDepthCancelButtonActionPerformed
+        selectBitplaneChooser.setVisible(false);
+    }//GEN-LAST:event_selectBitplaneDepthCancelButtonActionPerformed
+
+    private void selectBitplaneFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBitplaneFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_selectBitplaneFieldActionPerformed
+
+    private void selectBitplaneMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBitplaneMenuActionPerformed
+        selectBitplaneChooser.setVisible(true);
+    }//GEN-LAST:event_selectBitplaneMenuActionPerformed
+
+    private void changePixelDepthMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePixelDepthMenuActionPerformed
+        changePixelDepthChooser.setVisible(true);
+    }//GEN-LAST:event_changePixelDepthMenuActionPerformed
+
     private void changePixelDepthAcceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePixelDepthAcceptButtonActionPerformed
         int newDepth = Integer.parseInt(changePixelDepthField.getText());
-        rightImage = ImageLibrary.selectBitplane(leftImage, newDepth);
+        rightImage = ImageLibrary.changeBitDepth(leftImage, newDepth);
         rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
     }//GEN-LAST:event_changePixelDepthAcceptButtonActionPerformed
 
@@ -427,10 +531,6 @@ public class ImageLibraryUI extends javax.swing.JFrame {
     private void changePixelDepthFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePixelDepthFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_changePixelDepthFieldActionPerformed
-
-    private void changePixelDepthMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePixelDepthMenuActionPerformed
-        changePixelDepthChooser.setVisible(true);
-    }//GEN-LAST:event_changePixelDepthMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -491,6 +591,8 @@ public class ImageLibraryUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -498,6 +600,11 @@ public class ImageLibraryUI extends javax.swing.JFrame {
     private javax.swing.JLabel leftImageLabel;
     private javax.swing.JMenuItem openImage;
     private javax.swing.JLabel rightImageLabel;
+    private javax.swing.JButton selectBitplaneAcceptButton;
+    private javax.swing.JDialog selectBitplaneChooser;
+    private javax.swing.JButton selectBitplaneDepthCancelButton;
+    private java.awt.TextField selectBitplaneField;
+    private javax.swing.JMenuItem selectBitplaneMenu;
     private javax.swing.JMenu transformMenu;
     // End of variables declaration//GEN-END:variables
 }

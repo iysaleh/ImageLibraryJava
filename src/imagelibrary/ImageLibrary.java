@@ -188,6 +188,39 @@ public class ImageLibrary {
         return dst;
     }
     
+    /*
+    *   Change the bitdepth of an image.
+    *   This is only a faux change since the actual bits of the image remain
+    *   from 0-255 in the displayed/resulting image.
+    */
+    public static BufferedImage changeBitDepth(BufferedImage src,int bitDepth)
+    {
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Calculate the bitplane value
+        int bitmask = (int)Math.pow(2, bitDepth);
+        //We want the pixel shift so that we can display the pixels from a bitplane clearly.
+        int pixelShift = Math.max(7-bitDepth,0);
+        System.out.println(bitmask);
+        for(int i=0;i<src.getWidth();i++){
+            for(int j=0;j<src.getHeight();j++){
+                
+                // bitwise and the bitmask with the src pixel. Shift it to 8th bit position for visibility in the display.
+                if (pixelShift < 7){
+                    wrDst.setSample(i, j, 0, (wrSrc.getSample(i, j, 0) >> pixelShift << pixelShift));
+                }
+                else{
+                    wrDst.setSample(i, j, 0, wrSrc.getSample(i,j,0));
+                }
+            }
+        }
+        dst.setData(wrDst);
+ 
+        return dst;
+    }
+    
     public static BufferedImage deepCopy(BufferedImage src)
     {
         ColorModel cm = src.getColorModel();

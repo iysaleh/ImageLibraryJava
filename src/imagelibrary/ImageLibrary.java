@@ -165,6 +165,98 @@ public class ImageLibrary {
         System.out.println(dst);
         return dst;
     }
+
+    public static BufferedImage histogramEqualization(BufferedImage src)
+    {   
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Gray resolution of image -- hardcoded to 256 (2^8) here
+        int grayResolution = 256;
+        //2^8 array for histogram of grayscale values
+        int[] histogram = new int[grayResolution];
+        //2^8 array for CDF of histogram values
+        int[] cdf = new int[grayResolution];
+        //2^8 array for mapping of equalized histogram values
+        int[] mappedHistogramValues = new int[grayResolution];
+        //Iterate through every pixel in the image.
+        for(int i=0;i<src.getWidth();i++){
+            for(int j=0;j<src.getHeight();j++){
+                //Get the grayscale value of the current pixel
+                int pixelValue = wrSrc.getSample(i, j, 0);
+                //We found another pixel of this value, increase our histogram array by 1 for that gray level!
+                histogram[pixelValue] = histogram[pixelValue]+1;
+            }
+        }
+        //The number of pixels used in the image
+        int totalPixels = wrSrc.getHeight()*wrSrc.getWidth();
+        for(int i=0; i<histogram.length;i++)
+        {
+            //First value in CDF array is just the 0th value in the histogram array
+            if(i==0) cdf[i]=histogram[i];
+            else
+                //CDF is the accumlation of all histogram frequencies before and including this pixel gray level.
+                cdf[i]=cdf[i-1]+histogram[i];
+            //Calculate the mapped histogram equalized value for the pixel
+            mappedHistogramValues[i] = Math.min(Math.round((float)cdf[i]/totalPixels*grayResolution), 255);
+        }
+        //Loop through all pixels and equalize the histogram values using the calculated mapping array.
+        for(int i=0;i<src.getWidth();i++){
+            for(int j=0;j<src.getHeight();j++){
+                //Set the destination image with the values of the mapped histogram equalized values.
+                wrDst.setSample(i, j, 0, mappedHistogramValues[wrSrc.getSample(i, j, 0)]);
+            }
+        }
+        dst.setData(wrDst);
+        return dst;
+    }
+    
+    public static BufferedImage localHistogramEqualization(BufferedImage src,int filterX,int filterY)
+    {   
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Gray resolution of image -- hardcoded to 256 (2^8) here
+        int grayResolution = 256;
+        //2^8 array for histogram of grayscale values
+        int[] histogram = new int[grayResolution];
+        //2^8 array for CDF of histogram values
+        int[] cdf = new int[grayResolution];
+        //2^8 array for mapping of equalized histogram values
+        int[] mappedHistogramValues = new int[grayResolution];
+        //Iterate through every pixel in the image.
+        for(int i=0;i<src.getWidth();i++){
+            for(int j=0;j<src.getHeight();j++){
+                //Get the grayscale value of the current pixel
+                int pixelValue = wrSrc.getSample(i, j, 0);
+                //We found another pixel of this value, increase our histogram array by 1 for that gray level!
+                histogram[pixelValue] = histogram[pixelValue]+1;
+            }
+        }
+        //The number of pixels used in the image
+        int totalPixels = wrSrc.getHeight()*wrSrc.getWidth();
+        for(int i=0; i<histogram.length;i++)
+        {
+            //First value in CDF array is just the 0th value in the histogram array
+            if(i==0) cdf[i]=histogram[i];
+            else
+                //CDF is the accumlation of all histogram frequencies before and including this pixel gray level.
+                cdf[i]=cdf[i-1]+histogram[i];
+            //Calculate the mapped histogram equalized value for the pixel
+            mappedHistogramValues[i] = Math.min(Math.round((float)cdf[i]/totalPixels*grayResolution), 255);
+        }
+        //Loop through all pixels and equalize the histogram values using the calculated mapping array.
+        for(int i=0;i<src.getWidth();i++){
+            for(int j=0;j<src.getHeight();j++){
+                //Set the destination image with the values of the mapped histogram equalized values.
+                wrDst.setSample(i, j, 0, mappedHistogramValues[wrSrc.getSample(i, j, 0)]);
+            }
+        }
+        dst.setData(wrDst);
+        return dst;
+    }
     
     public static BufferedImage selectBitplane(BufferedImage src,int bitplane)
     {

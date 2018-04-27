@@ -57,6 +57,16 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         changePixelDepthField = new java.awt.TextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        histogramEqualizationChooser = new javax.swing.JDialog();
+        histogramEqualizationAcceptButton = new javax.swing.JButton();
+        histogramEqualizationCancelButton = new javax.swing.JButton();
+        equalizationMethodChoice = new java.awt.Choice();
+        jLabel5 = new javax.swing.JLabel();
+        histogramEqualizationFilterX = new java.awt.TextField();
+        histogramEqualizationFilterY = new java.awt.TextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         leftImageLabel = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -71,6 +81,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         changeResolutionMenu = new javax.swing.JMenuItem();
         changePixelDepthMenu = new javax.swing.JMenuItem();
         selectBitplaneMenu = new javax.swing.JMenuItem();
+        histogramEqualizationMenu = new javax.swing.JMenuItem();
 
         fileChooser.setCurrentDirectory(new File("./images"));
 
@@ -94,7 +105,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         interpolationMethodChoice.add("LinearX");
         interpolationMethodChoice.add("LinearY");
         interpolationMethodChoice.add("Bilinear");
-        interpolationMethodChoice.select("Nearest Neighbot");
+        interpolationMethodChoice.select("Nearest Neighbor");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Select Interpolation Method:");
@@ -312,6 +323,110 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        histogramEqualizationChooser.setMinimumSize(new java.awt.Dimension(600, 300));
+
+        histogramEqualizationAcceptButton.setText("Accept");
+        histogramEqualizationAcceptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                histogramEqualizationAcceptButtonActionPerformed(evt);
+            }
+        });
+
+        histogramEqualizationCancelButton.setText("Close");
+        histogramEqualizationCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                histogramEqualizationCancelButtonActionPerformed(evt);
+            }
+        });
+
+        equalizationMethodChoice.add("Global Histogram Equalization");
+        equalizationMethodChoice.add("Local Histogram Equalization");
+        equalizationMethodChoice.select("Local Histogram Equalization");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setText("Select Histogram Equalization Method:");
+
+        histogramEqualizationFilterX.setMinimumSize(new java.awt.Dimension(100, 20));
+        histogramEqualizationFilterX.setText("3");
+        histogramEqualizationFilterX.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                histogramEqualizationFilterXActionPerformed(evt);
+            }
+        });
+
+        histogramEqualizationFilterY.setMinimumSize(new java.awt.Dimension(100, 20));
+        histogramEqualizationFilterY.setText("3");
+        histogramEqualizationFilterY.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                histogramEqualizationFilterYActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel10.setText("Filter Size (Local Histogram Equalization Only)");
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel11.setText("Histogram Equalization Menu");
+
+        jLabel12.setText("x");
+
+        javax.swing.GroupLayout histogramEqualizationChooserLayout = new javax.swing.GroupLayout(histogramEqualizationChooser.getContentPane());
+        histogramEqualizationChooser.getContentPane().setLayout(histogramEqualizationChooserLayout);
+        histogramEqualizationChooserLayout.setHorizontalGroup(
+            histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(27, 27, 27))
+                    .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(equalizationMethodChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                        .addComponent(histogramEqualizationFilterX, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(histogramEqualizationFilterY, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(57, 57, 57))
+            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addComponent(histogramEqualizationAcceptButton)
+                .addGap(29, 29, 29)
+                .addComponent(histogramEqualizationCancelButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, histogramEqualizationChooserLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel11)
+                .addGap(143, 143, 143))
+        );
+        histogramEqualizationChooserLayout.setVerticalGroup(
+            histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                .addContainerGap(29, Short.MAX_VALUE)
+                .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(equalizationMethodChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(histogramEqualizationFilterX, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)
+                            .addComponent(histogramEqualizationFilterY, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel12))
+                .addGap(18, 18, 18)
+                .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(histogramEqualizationAcceptButton)
+                    .addComponent(histogramEqualizationCancelButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jScrollPane1.setViewportView(leftImageLabel);
@@ -382,6 +497,14 @@ public class ImageLibraryUI extends javax.swing.JFrame {
             }
         });
         transformMenu.add(selectBitplaneMenu);
+
+        histogramEqualizationMenu.setText("Histogram Equalization");
+        histogramEqualizationMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                histogramEqualizationMenuActionPerformed(evt);
+            }
+        });
+        transformMenu.add(histogramEqualizationMenu);
 
         jMenuBar1.add(transformMenu);
 
@@ -462,10 +585,6 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_changeResolutionWidthActionPerformed
 
-    private void changeResolutionHeightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeResolutionHeightActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_changeResolutionHeightActionPerformed
-
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
@@ -532,6 +651,41 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_changePixelDepthFieldActionPerformed
 
+    private void histogramEqualizationMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_histogramEqualizationMenuActionPerformed
+        histogramEqualizationChooser.setVisible(true);
+    }//GEN-LAST:event_histogramEqualizationMenuActionPerformed
+
+    private void changeResolutionHeightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeResolutionHeightActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_changeResolutionHeightActionPerformed
+
+    private void histogramEqualizationFilterYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_histogramEqualizationFilterYActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_histogramEqualizationFilterYActionPerformed
+
+    private void histogramEqualizationFilterXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_histogramEqualizationFilterXActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_histogramEqualizationFilterXActionPerformed
+
+    private void histogramEqualizationCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_histogramEqualizationCancelButtonActionPerformed
+        histogramEqualizationChooser.setVisible(false);
+    }//GEN-LAST:event_histogramEqualizationCancelButtonActionPerformed
+
+    private void histogramEqualizationAcceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_histogramEqualizationAcceptButtonActionPerformed
+        switch (equalizationMethodChoice.getSelectedItem()){
+            case "Global Histogram Equalization":
+                rightImage = ImageLibrary.histogramEqualization(leftImage);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Local Histogram Equalization":
+                rightImage = ImageLibrary.localHistogramEqualization(leftImage,Integer.parseInt(histogramEqualizationFilterX.getText()),Integer.parseInt(histogramEqualizationFilterY.getText()));
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_histogramEqualizationAcceptButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -581,14 +735,25 @@ public class ImageLibraryUI extends javax.swing.JFrame {
     private java.awt.TextField changeResolutionHeight;
     private javax.swing.JMenuItem changeResolutionMenu;
     private java.awt.TextField changeResolutionWidth;
+    private java.awt.Choice equalizationMethodChoice;
     private javax.swing.JMenuItem exit;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JButton histogramEqualizationAcceptButton;
+    private javax.swing.JButton histogramEqualizationCancelButton;
+    private javax.swing.JDialog histogramEqualizationChooser;
+    private java.awt.TextField histogramEqualizationFilterX;
+    private java.awt.TextField histogramEqualizationFilterY;
+    private javax.swing.JMenuItem histogramEqualizationMenu;
     private java.awt.Choice interpolationMethodChoice;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

@@ -206,7 +206,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         jLabel6.setText("Select Pixel Bitplane Slice (bit):");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel7.setText("Change Pixel Depth Menu");
+        jLabel7.setText("Select Bitplane Menu");
 
         javax.swing.GroupLayout selectBitplaneChooserLayout = new javax.swing.GroupLayout(selectBitplaneChooser.getContentPane());
         selectBitplaneChooser.getContentPane().setLayout(selectBitplaneChooserLayout);
@@ -270,7 +270,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         });
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setText("Select Pixel Bitplane Slice (bit):");
+        jLabel8.setText("Select Pixel Bit Depth (bit):");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel9.setText("Change Pixel Depth Menu");

@@ -199,21 +199,12 @@ public class ImageLibrary {
         WritableRaster wrSrc = src.getRaster();
         WritableRaster wrDst = dst.getRaster();
         
-        //Calculate the bitplane value
-        int bitmask = (int)Math.pow(2, bitDepth);
         //We want the pixel shift so that we can display the pixels from a bitplane clearly.
-        int pixelShift = Math.max(7-bitDepth,0);
-        System.out.println(bitmask);
+        int pixelShift = Math.max(8-bitDepth,0);
         for(int i=0;i<src.getWidth();i++){
             for(int j=0;j<src.getHeight();j++){
-                
-                // bitwise and the bitmask with the src pixel. Shift it to 8th bit position for visibility in the display.
-                if (pixelShift < 7){
-                    wrDst.setSample(i, j, 0, (wrSrc.getSample(i, j, 0) >> pixelShift << pixelShift));
-                }
-                else{
-                    wrDst.setSample(i, j, 0, wrSrc.getSample(i,j,0));
-                }
+                //Shift pixels to get new bit depth. Because we still display in 8 bit, shift back.
+                wrDst.setSample(i, j, 0, (wrSrc.getSample(i, j, 0) >> pixelShift << pixelShift));
             }
         }
         dst.setData(wrDst);

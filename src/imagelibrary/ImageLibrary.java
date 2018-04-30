@@ -432,8 +432,8 @@ public class ImageLibrary {
         return dst;
     }
 
-    //Convolve a given filter with a src image and output the result ot the destination image. (Note, src image should already be padded if convolving on edge pixels!)
-    public static void convolvePixel(WritableRaster src, WritableRaster dst, int[][] filter,int srcX,int srcY, int dstX, int dstY)
+    //Convolve a given filter with a src image pixel and output the result ot the destination image. (Note, src image should already be padded if convolving on edge pixels!)
+    public static void convolvePixel(WritableRaster src, int[][] unscaledOutput, int[][] filter,int srcX,int srcY, int dstX, int dstY)
     {
         int w = getFilterW(filter);
         //Only odd sized filters are supported (EG: 3x3,3x5)
@@ -442,89 +442,56 @@ public class ImageLibrary {
         int centerX = filterX/2;
         int centerY = filterY/2;
         int convolutionResult = 0;
-        for(int i=-centerX; i<centerX;i++)
-            for(int j=-centerY; j<centerY;j++)
+        for(int i=-centerX; i<=centerX;i++)
+            for(int j=-centerY; j<=centerY;j++)
             {
-                convolutionResult = (src.getSample(i, j, 0)*filter[i+centerX][j+centerY])+convolutionResult;
+                convolutionResult = (src.getSample(i+srcX, j+srcY, 0)*filter[i+centerX][j+centerY])+convolutionResult;
             }
-        convolutionResult = (int)Math.round(((double)1/w) * convolutionResult); 
-        dst.setSample(dstX, dstY, 0, convolutionResult);
+        if (w!=0)
+            convolutionResult = Math.round(((float)1/w) * convolutionResult); 
+        unscaledOutput[dstX][dstY]=convolutionResult;
+        //dst.setSample(dstX, dstY, 0, convolutionResult);
     }
     
-    public static BufferedImage smoothingFilter(BufferedImage src,int[][] filter,String paddingType)
+    public static BufferedImage convolveImage(BufferedImage src,int[][] filter,String paddingType)
     {  
         BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
         WritableRaster wrSrc = src.getRaster();
         WritableRaster wrDst = dst.getRaster();
         
-        //Initialize Pad-relevant variables
-        BufferedImage padImg;
-        WritableRaster padRaster;
-        /*
+        int [][] unscaledOutput = new int[src.getWidth()][src.getHeight()];
         
-        //Do the setup for different padding types.
-        //Currently only support 0 padding
-        if (paddingType=="zero"){
-            //Create a new padded image buffer which accounts for the necessary padding.
-            padImg = zeroPadImage(src,filterX,filterY);
-            padRaster = padImg.getRaster();
-        }
-        else {
-            return src; //No other padding types are supported currently!
-        }
-        int [][] smoothingFilter = smoothingAverageFilter1();
-        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
-            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
-                
-                //Loop through filter.
-                for(int x = -xPad; x < xPad+1; x++)
-                    for(int y = -yPad; y < yPad+1; y++){
-                        //Calculate Filter Effect
-                    }
-                if(paddingType=="zero")
-                    wrDst.setSample(i-xPad, j-yPad, 0, padRaster.getSample(i,j,0));
-            }
-        
-        */
-        dst.setData(wrDst);
-        return dst;
-    }
-    
-    public static BufferedImage sharpeningLaplacianFilter(BufferedImage src,int filterX,int filterY,String paddingType)
-    {  
-        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
-        WritableRaster wrSrc = src.getRaster();
-        WritableRaster wrDst = dst.getRaster();
-        
-        //Initialize Pad-relevant variables
-        BufferedImage padImg;
-        WritableRaster padRaster;
+        int filterX = filter.length;
+        int filterY = filter[0].length;
         int xPad = filterX/2;
         int yPad = filterY/2;
         
-        //Do the setup for different padding types.
-        //Currently only support 0 padding
-        if (paddingType=="zero"){
-            //Create a new padded image buffer which accounts for the necessary padding.
-            padImg = zeroPadImage(src,filterX,filterY);
-            padRaster = padImg.getRaster();
-        }
-        else {
-            return src; //No other padding types are supported currently!
-        }
+        //Initialize Pad-relevant variables
+        BufferedImage padImg = zeroPadImage(src,filterX,filterY);
+        WritableRaster padRaster = padImg.getRaster();
         
+        int maxPixelValue = 0;
+        int minPixelValue = 255;
         for(int i=xPad;i<padImg.getWidth()-xPad;i++)
             for(int j=yPad;j<padImg.getHeight()-yPad;j++){
-                
-                //Loop through filter.
-                for(int x = -xPad; x < xPad+1; x++)
-                    for(int y = -yPad; y < yPad+1; y++){
-                        //Calculate Filter Effect
-                    }
-                if(paddingType=="zero")
-                    wrDst.setSample(i-xPad, j-yPad, 0, padRaster.getSample(i,j,0));
+                convolvePixel(padRaster,unscaledOutput,filter,i,j,i-xPad,j-yPad);
+                maxPixelValue = Math.max(maxPixelValue, unscaledOutput[i-xPad][j-yPad]);
+                minPixelValue = Math.min(minPixelValue, unscaledOutput[i-xPad][j-yPad]);
             }
+        minPixelValue = Math.abs(minPixelValue);
+        //System.out.println("MinPixelValue+")
         
+        //System.out.println("MAX_PIXEL_VALUE:"+maxPixelValue);
+        //System.out.println("MIN_PIXEL_VALUE:"+minPixelValue);
+        
+        //Scale the values in the image!
+        for(int i=0; i<wrDst.getWidth();i++)
+            for(int j=0;j<wrDst.getHeight();j++){
+                //Scale the pixel value to be within 0-255!
+                int scaledValue = Math.round((((float)unscaledOutput[i][j]+minPixelValue)/(maxPixelValue+minPixelValue))*255);
+                //System.out.println("MAX_MINS:"+scaledValue);
+                wrDst.setSample(i, j, 0, scaledValue);
+            }
         dst.setData(wrDst);
         return dst;
     }

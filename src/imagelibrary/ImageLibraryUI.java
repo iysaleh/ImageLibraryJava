@@ -1074,7 +1074,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         
         switch(spatialFilterMethodChoice.getSelectedItem()){
             case "Smoothing Filter":
-                rightImage = ImageLibrary.smoothingFilter(leftImage,ImageLibrary.smoothingAverageFilter1(),paddingType);
+                rightImage = ImageLibrary.convolveImage(leftImage,ImageLibrary.smoothingAverageFilter1(),paddingType);
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             case "Median Filter":
@@ -1082,7 +1082,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             case "Sharpening Laplacian Filter":
-                rightImage = ImageLibrary.sharpeningLaplacianFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),paddingType);
+                rightImage = ImageLibrary.convolveImage(leftImage,ImageLibrary.sharpeningLaplacianFilter1(),paddingType);
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             case "High-Boosting Filter":

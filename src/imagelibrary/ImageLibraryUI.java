@@ -67,6 +67,35 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        histogramEqualizationEdgePixelChoice = new java.awt.Choice();
+        jLabel13 = new javax.swing.JLabel();
+        spatialFilteringChooser = new javax.swing.JDialog();
+        spatialFilteringAcceptButton = new javax.swing.JButton();
+        spatialFilteringCancelButton = new javax.swing.JButton();
+        spatialFilterMethodChoice = new java.awt.Choice();
+        jLabel14 = new javax.swing.JLabel();
+        spatialFilterX = new java.awt.TextField();
+        spatialFilterY = new java.awt.TextField();
+        spatialFilteringScalar = new java.awt.TextField();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        spatialFilteringEdgePixelChoice = new java.awt.Choice();
+        selectBitplanesChooser = new javax.swing.JDialog();
+        selectBitplanesAcceptButton = new javax.swing.JButton();
+        selectBitplanesCancelButton = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        bit8CheckBox = new javax.swing.JCheckBox();
+        jLabel20 = new javax.swing.JLabel();
+        bit7CheckBox = new javax.swing.JCheckBox();
+        bit6CheckBox = new javax.swing.JCheckBox();
+        bit5CheckBox = new javax.swing.JCheckBox();
+        bit4CheckBox = new javax.swing.JCheckBox();
+        bit1CheckBox = new javax.swing.JCheckBox();
+        bit2CheckBox = new javax.swing.JCheckBox();
+        bit3CheckBox = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         leftImageLabel = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -81,7 +110,10 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         changeResolutionMenu = new javax.swing.JMenuItem();
         changePixelDepthMenu = new javax.swing.JMenuItem();
         selectBitplaneMenu = new javax.swing.JMenuItem();
+        selectBitplanesMenu = new javax.swing.JMenuItem();
         histogramEqualizationMenu = new javax.swing.JMenuItem();
+        drawHistogramMenu = new javax.swing.JMenuItem();
+        spatialFilteringMenu = new javax.swing.JMenuItem();
 
         fileChooser.setCurrentDirectory(new File("./images"));
 
@@ -370,43 +402,57 @@ public class ImageLibraryUI extends javax.swing.JFrame {
 
         jLabel12.setText("x");
 
+        histogramEqualizationEdgePixelChoice.add("Zero Padding");
+        histogramEqualizationEdgePixelChoice.add("Skip Edge Pixel Processing");
+        histogramEqualizationEdgePixelChoice.select("Zero Padding");
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel13.setText("Select Edge Pixel Handling Method:");
+
         javax.swing.GroupLayout histogramEqualizationChooserLayout = new javax.swing.GroupLayout(histogramEqualizationChooser.getContentPane());
         histogramEqualizationChooser.getContentPane().setLayout(histogramEqualizationChooserLayout);
         histogramEqualizationChooserLayout.setHorizontalGroup(
             histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(27, 27, 27))
-                    .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(equalizationMethodChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
-                        .addComponent(histogramEqualizationFilterX, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(histogramEqualizationFilterY, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(57, 57, 57))
-            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
-                .addGap(200, 200, 200)
-                .addComponent(histogramEqualizationAcceptButton)
-                .addGap(29, 29, 29)
-                .addComponent(histogramEqualizationCancelButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, histogramEqualizationChooserLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel11)
                 .addGap(143, 143, 143))
+            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                .addGap(233, 233, 233)
+                .addComponent(histogramEqualizationAcceptButton)
+                .addGap(29, 29, 29)
+                .addComponent(histogramEqualizationCancelButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(histogramEqualizationEdgePixelChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                        .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(27, 27, 27))
+                            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(equalizationMethodChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
+                                .addComponent(histogramEqualizationFilterX, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(histogramEqualizationFilterY, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(57, 57, 57))))
         );
         histogramEqualizationChooserLayout.setVerticalGroup(
             histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
-                .addContainerGap(29, Short.MAX_VALUE)
+                .addContainerGap(67, Short.MAX_VALUE)
                 .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(histogramEqualizationChooserLayout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -420,11 +466,308 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                             .addComponent(jLabel10)
                             .addComponent(histogramEqualizationFilterY, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel12))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(histogramEqualizationEdgePixelChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(histogramEqualizationChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(histogramEqualizationAcceptButton)
                     .addComponent(histogramEqualizationCancelButton))
+                .addContainerGap())
+        );
+
+        spatialFilteringChooser.setMinimumSize(new java.awt.Dimension(600, 300));
+
+        spatialFilteringAcceptButton.setText("Accept");
+        spatialFilteringAcceptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spatialFilteringAcceptButtonActionPerformed(evt);
+            }
+        });
+
+        spatialFilteringCancelButton.setText("Close");
+        spatialFilteringCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spatialFilteringCancelButtonActionPerformed(evt);
+            }
+        });
+
+        spatialFilterMethodChoice.add("Smoothing Filter");
+        spatialFilterMethodChoice.add("Median Filter");
+        spatialFilterMethodChoice.add("Sharpening Laplacian Filter");
+        spatialFilterMethodChoice.add("High-Boosting Filter");
+        spatialFilterMethodChoice.select("Median Filter");
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel14.setText("Select Filter Type:");
+
+        spatialFilterX.setMinimumSize(new java.awt.Dimension(100, 20));
+        spatialFilterX.setText("3");
+        spatialFilterX.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spatialFilterXActionPerformed(evt);
+            }
+        });
+
+        spatialFilterY.setMinimumSize(new java.awt.Dimension(100, 20));
+        spatialFilterY.setText("3");
+        spatialFilterY.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spatialFilterYActionPerformed(evt);
+            }
+        });
+
+        spatialFilteringScalar.setMinimumSize(new java.awt.Dimension(100, 20));
+        spatialFilteringScalar.setText("1.2");
+        spatialFilteringScalar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spatialFilteringScalarActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel15.setText("Filter Size:");
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel16.setText("Spatial Filtering Menu");
+
+        jLabel17.setText("x");
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel18.setText("Filter Scalar (High-Boosting Filter Only):");
+
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel19.setText("Select Edge Pixel Handling Method:");
+
+        spatialFilteringEdgePixelChoice.add("Zero Padding");
+        spatialFilteringEdgePixelChoice.select("Zero Padding");
+
+        javax.swing.GroupLayout spatialFilteringChooserLayout = new javax.swing.GroupLayout(spatialFilteringChooser.getContentPane());
+        spatialFilteringChooser.getContentPane().setLayout(spatialFilteringChooserLayout);
+        spatialFilteringChooserLayout.setHorizontalGroup(
+            spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                        .addGap(233, 233, 233)
+                        .addComponent(spatialFilteringAcceptButton)
+                        .addGap(29, 29, 29)
+                        .addComponent(spatialFilteringCancelButton))
+                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addComponent(jLabel16)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spatialFilteringEdgePixelChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spatialFilteringScalar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                        .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                                .addGap(27, 27, 27))
+                            .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                                .addComponent(jLabel15)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spatialFilterMethodChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                                .addComponent(spatialFilterX, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(spatialFilterY, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(57, 57, 57))))
+        );
+        spatialFilteringChooserLayout.setVerticalGroup(
+            spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                .addContainerGap(62, Short.MAX_VALUE)
+                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spatialFilterMethodChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(spatialFilterX, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel15)
+                        .addComponent(spatialFilterY, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel17))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel18)
+                    .addComponent(spatialFilteringScalar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spatialFilteringEdgePixelChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(spatialFilteringAcceptButton)
+                    .addComponent(spatialFilteringCancelButton))
+                .addContainerGap())
+        );
+
+        selectBitplanesChooser.setMaximumSize(new java.awt.Dimension(450, 200));
+        selectBitplanesChooser.setMinimumSize(new java.awt.Dimension(450, 200));
+
+        selectBitplanesAcceptButton.setText("Accept");
+        selectBitplanesAcceptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectBitplanesAcceptButtonActionPerformed(evt);
+            }
+        });
+
+        selectBitplanesCancelButton.setText("Close");
+        selectBitplanesCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectBitplanesCancelButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel21.setText("Select Bitplanes Menu");
+
+        bit8CheckBox.setText("Bit 8");
+        bit8CheckBox.setSelected(true);
+        bit8CheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bit8CheckBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel20.setText("Select which bits to enable/disable:");
+
+        bit7CheckBox.setText("Bit 7");
+        bit7CheckBox.setSelected(true);
+        bit7CheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bit7CheckBoxActionPerformed(evt);
+            }
+        });
+
+        bit6CheckBox.setText("Bit 6");
+        bit6CheckBox.setSelected(true);
+        bit6CheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bit6CheckBoxActionPerformed(evt);
+            }
+        });
+
+        bit5CheckBox.setText("Bit 5");
+        bit5CheckBox.setSelected(true);
+        bit5CheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bit5CheckBoxActionPerformed(evt);
+            }
+        });
+
+        bit4CheckBox.setText("Bit 4");
+        bit4CheckBox.setSelected(true);
+        bit4CheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bit4CheckBoxActionPerformed(evt);
+            }
+        });
+
+        bit1CheckBox.setText("Bit 1");
+        bit1CheckBox.setSelected(true);
+        bit1CheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bit1CheckBoxActionPerformed(evt);
+            }
+        });
+
+        bit2CheckBox.setText("Bit 2");
+        bit2CheckBox.setSelected(true);
+        bit2CheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bit2CheckBoxActionPerformed(evt);
+            }
+        });
+
+        bit3CheckBox.setText("Bit 3");
+        bit3CheckBox.setSelected(true);
+        bit3CheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bit3CheckBoxActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout selectBitplanesChooserLayout = new javax.swing.GroupLayout(selectBitplanesChooser.getContentPane());
+        selectBitplanesChooser.getContentPane().setLayout(selectBitplanesChooserLayout);
+        selectBitplanesChooserLayout.setHorizontalGroup(
+            selectBitplanesChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(selectBitplanesChooserLayout.createSequentialGroup()
+                .addGroup(selectBitplanesChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(selectBitplanesChooserLayout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addComponent(selectBitplanesAcceptButton)
+                        .addGap(87, 87, 87)
+                        .addComponent(selectBitplanesCancelButton)
+                        .addGap(0, 101, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, selectBitplanesChooserLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(selectBitplanesChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(selectBitplanesChooserLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(selectBitplanesChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(selectBitplanesChooserLayout.createSequentialGroup()
+                                        .addComponent(bit8CheckBox)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(bit7CheckBox)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(bit6CheckBox)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(bit5CheckBox))
+                                    .addGroup(selectBitplanesChooserLayout.createSequentialGroup()
+                                        .addComponent(bit4CheckBox)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(bit3CheckBox)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(bit2CheckBox)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(bit1CheckBox))))
+                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+        );
+        selectBitplanesChooserLayout.setVerticalGroup(
+            selectBitplanesChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(selectBitplanesChooserLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(selectBitplanesChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bit8CheckBox)
+                    .addComponent(bit7CheckBox)
+                    .addComponent(bit6CheckBox)
+                    .addComponent(bit5CheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(selectBitplanesChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bit4CheckBox)
+                    .addComponent(bit3CheckBox)
+                    .addComponent(bit2CheckBox)
+                    .addComponent(bit1CheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(selectBitplanesChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(selectBitplanesAcceptButton)
+                    .addComponent(selectBitplanesCancelButton))
+                .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -498,6 +841,14 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         });
         transformMenu.add(selectBitplaneMenu);
 
+        selectBitplanesMenu.setText("Select Bitplanes");
+        selectBitplanesMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectBitplanesMenuActionPerformed(evt);
+            }
+        });
+        transformMenu.add(selectBitplanesMenu);
+
         histogramEqualizationMenu.setText("Histogram Equalization");
         histogramEqualizationMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -505,6 +856,22 @@ public class ImageLibraryUI extends javax.swing.JFrame {
             }
         });
         transformMenu.add(histogramEqualizationMenu);
+
+        drawHistogramMenu.setText("Draw Histogram");
+        drawHistogramMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                drawHistogramMenuActionPerformed(evt);
+            }
+        });
+        transformMenu.add(drawHistogramMenu);
+
+        spatialFilteringMenu.setText("Spatial Filtering");
+        spatialFilteringMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spatialFilteringMenuActionPerformed(evt);
+            }
+        });
+        transformMenu.add(spatialFilteringMenu);
 
         jMenuBar1.add(transformMenu);
 
@@ -678,13 +1045,120 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             case "Local Histogram Equalization":
-                rightImage = ImageLibrary.localHistogramEqualization(leftImage,Integer.parseInt(histogramEqualizationFilterX.getText()),Integer.parseInt(histogramEqualizationFilterY.getText()));
+                String paddingType = histogramEqualizationEdgePixelChoice.getSelectedItem();
+                if (paddingType == "Zero Padding")
+                    paddingType = "zero";
+                else
+                    paddingType = "skip";
+                rightImage = ImageLibrary.localHistogramEqualization(leftImage,Integer.parseInt(histogramEqualizationFilterX.getText()),Integer.parseInt(histogramEqualizationFilterY.getText()),paddingType);
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             default:
                 break;
         }
     }//GEN-LAST:event_histogramEqualizationAcceptButtonActionPerformed
+
+    private void spatialFilteringMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spatialFilteringMenuActionPerformed
+        spatialFilteringChooser.setVisible(true);
+    }//GEN-LAST:event_spatialFilteringMenuActionPerformed
+
+    private void spatialFilteringAcceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spatialFilteringAcceptButtonActionPerformed
+        
+        //Translate the padding type selection to the expected padding selectors
+        String paddingType = spatialFilteringEdgePixelChoice.getSelectedItem();
+        if (paddingType == "Zero Padding")
+            paddingType = "zero";
+        else
+            paddingType = "skip";
+        
+        
+        switch(spatialFilterMethodChoice.getSelectedItem()){
+            case "Smoothing Filter":
+                rightImage = ImageLibrary.smoothingFilter(leftImage,ImageLibrary.smoothingAverageFilter1(),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Median Filter":
+                rightImage = ImageLibrary.medianFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Sharpening Laplacian Filter":
+                rightImage = ImageLibrary.sharpeningLaplacianFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "High-Boosting Filter":
+                rightImage = ImageLibrary.highBoostFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),Float.parseFloat(spatialFilteringScalar.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_spatialFilteringAcceptButtonActionPerformed
+
+    private void spatialFilteringCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spatialFilteringCancelButtonActionPerformed
+        spatialFilteringChooser.setVisible(false);
+    }//GEN-LAST:event_spatialFilteringCancelButtonActionPerformed
+
+    private void spatialFilterXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spatialFilterXActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_spatialFilterXActionPerformed
+
+    private void spatialFilterYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spatialFilterYActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_spatialFilterYActionPerformed
+
+    private void spatialFilteringScalarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spatialFilteringScalarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_spatialFilteringScalarActionPerformed
+
+    private void selectBitplanesAcceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBitplanesAcceptButtonActionPerformed
+        rightImage = ImageLibrary.selectBitplanes(leftImage,bit8CheckBox.isSelected(),bit7CheckBox.isSelected(),bit6CheckBox.isSelected(),bit5CheckBox.isSelected(),bit4CheckBox.isSelected(),bit3CheckBox.isSelected(),bit2CheckBox.isSelected(),bit1CheckBox.isSelected());
+        rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+    }//GEN-LAST:event_selectBitplanesAcceptButtonActionPerformed
+
+    private void selectBitplanesCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBitplanesCancelButtonActionPerformed
+        selectBitplanesChooser.setVisible(false);
+    }//GEN-LAST:event_selectBitplanesCancelButtonActionPerformed
+
+    private void bit8CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bit8CheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bit8CheckBoxActionPerformed
+
+    private void bit7CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bit7CheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bit7CheckBoxActionPerformed
+
+    private void bit6CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bit6CheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bit6CheckBoxActionPerformed
+
+    private void bit5CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bit5CheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bit5CheckBoxActionPerformed
+
+    private void bit4CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bit4CheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bit4CheckBoxActionPerformed
+
+    private void bit1CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bit1CheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bit1CheckBoxActionPerformed
+
+    private void bit2CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bit2CheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bit2CheckBoxActionPerformed
+
+    private void bit3CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bit3CheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bit3CheckBoxActionPerformed
+
+    private void selectBitplanesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBitplanesMenuActionPerformed
+        selectBitplanesChooser.setVisible(true);
+    }//GEN-LAST:event_selectBitplanesMenuActionPerformed
+
+    private void drawHistogramMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawHistogramMenuActionPerformed
+        rightImage = ImageLibrary.drawHistogram(leftImage, 768, 512);
+        rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+    }//GEN-LAST:event_drawHistogramMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -724,6 +1198,14 @@ public class ImageLibraryUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton acceptTransformationButton;
+    private javax.swing.JCheckBox bit1CheckBox;
+    private javax.swing.JCheckBox bit2CheckBox;
+    private javax.swing.JCheckBox bit3CheckBox;
+    private javax.swing.JCheckBox bit4CheckBox;
+    private javax.swing.JCheckBox bit5CheckBox;
+    private javax.swing.JCheckBox bit6CheckBox;
+    private javax.swing.JCheckBox bit7CheckBox;
+    private javax.swing.JCheckBox bit8CheckBox;
     private javax.swing.JButton changePixelDepthAcceptButton;
     private javax.swing.JButton changePixelDepthCancelButton;
     private javax.swing.JDialog changePixelDepthChooser;
@@ -735,6 +1217,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
     private java.awt.TextField changeResolutionHeight;
     private javax.swing.JMenuItem changeResolutionMenu;
     private java.awt.TextField changeResolutionWidth;
+    private javax.swing.JMenuItem drawHistogramMenu;
     private java.awt.Choice equalizationMethodChoice;
     private javax.swing.JMenuItem exit;
     private javax.swing.JFileChooser fileChooser;
@@ -742,6 +1225,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
     private javax.swing.JButton histogramEqualizationAcceptButton;
     private javax.swing.JButton histogramEqualizationCancelButton;
     private javax.swing.JDialog histogramEqualizationChooser;
+    private java.awt.Choice histogramEqualizationEdgePixelChoice;
     private java.awt.TextField histogramEqualizationFilterX;
     private java.awt.TextField histogramEqualizationFilterY;
     private javax.swing.JMenuItem histogramEqualizationMenu;
@@ -750,7 +1234,16 @@ public class ImageLibraryUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -770,6 +1263,19 @@ public class ImageLibraryUI extends javax.swing.JFrame {
     private javax.swing.JButton selectBitplaneDepthCancelButton;
     private java.awt.TextField selectBitplaneField;
     private javax.swing.JMenuItem selectBitplaneMenu;
+    private javax.swing.JButton selectBitplanesAcceptButton;
+    private javax.swing.JButton selectBitplanesCancelButton;
+    private javax.swing.JDialog selectBitplanesChooser;
+    private javax.swing.JMenuItem selectBitplanesMenu;
+    private java.awt.Choice spatialFilterMethodChoice;
+    private java.awt.TextField spatialFilterX;
+    private java.awt.TextField spatialFilterY;
+    private javax.swing.JButton spatialFilteringAcceptButton;
+    private javax.swing.JButton spatialFilteringCancelButton;
+    private javax.swing.JDialog spatialFilteringChooser;
+    private java.awt.Choice spatialFilteringEdgePixelChoice;
+    private javax.swing.JMenuItem spatialFilteringMenu;
+    private java.awt.TextField spatialFilteringScalar;
     private javax.swing.JMenu transformMenu;
     // End of variables declaration//GEN-END:variables
 }

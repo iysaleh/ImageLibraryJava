@@ -12,6 +12,7 @@ import java.awt.image.WritableRaster;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.lang.Math;
+import java.util.ArrayList;
 /**
  *
  * @author Ibraheem Saleh
@@ -212,21 +213,147 @@ public class ImageLibrary {
         return dst;
     }
     
-    public static BufferedImage localHistogramEqualization(BufferedImage src,int filterX,int filterY)
+    public static BufferedImage zeroPadImage(BufferedImage src, int filterX, int filterY)
+    {
+        //Get writable raster of the src image.
+        WritableRaster wrSrc = src.getRaster();
+
+        //Half of the filter size x&y which must be padded or skipped depending on paddingType
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        ////Create a new padded image buffer which accounts for the necessary padding.
+        BufferedImage padImg = new BufferedImage((2*xPad) + src.getWidth(),(2*yPad) + src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster padRaster = padImg.getRaster();
+        
+        //Initially fill the image with zeros
+        for(int i=0; i<padImg.getWidth();i++)
+            for(int j=0; j<padImg.getHeight();j++)
+                padRaster.setSample(i, j, 0, 0);
+
+        //Fill the non-pad pixels with the values from the src image
+        for(int i=0;i<src.getWidth();i++)
+            for(int j=0;j<src.getHeight();j++)
+                padRaster.setSample(i+xPad, j+yPad, 0, wrSrc.getSample(i, j, 0));
+        return padImg;
+    }
+    
+    public static BufferedImage scaleImage(BufferedImage src)
+    {
+        //Get writable raster of the src image.
+        WritableRaster wrSrc = src.getRaster();
+
+        ////Create a new padded image buffer which accounts for the necessary padding.
+        BufferedImage scaledImg = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster scaledRaster = scaledImg.getRaster();
+        
+        int lowestValue=0;
+        int maxValue=0;
+        //Find the lowest & max values for a given image
+        for(int i=0; i<src.getWidth();i++)
+            for(int j=0; j<src.getHeight();j++){
+                lowestValue = Math.min(lowestValue, wrSrc.getSample(i, j, 0));
+                maxValue = Math.max(maxValue,wrSrc.getSample(i, j, 0));
+            }
+
+        //Get the absolute value of the lowest value pixel
+        lowestValue = Math.abs(lowestValue);
+        //Scale the image according to the lowest and max values
+        for(int i=0; i<src.getWidth();i++)
+            for(int j=0; j<src.getHeight();j++){
+                int sample = wrSrc.getSample(i, j, 0);
+                //scale the sample
+                sample = Math.round((((float)lowestValue+sample)/maxValue+lowestValue)*255);
+                //set the value of the scaled buffered image with the scaled sample value.
+                scaledRaster.setSample(i, j, 0, sample);
+            }
+        return scaledImg;
+    }
+    
+    public static BufferedImage drawHistogram(BufferedImage src, int histogramWidth, int histogramHeight)
+    {
+        BufferedImage histogramImg = new BufferedImage(histogramWidth+1,histogramHeight+1,BufferedImage.TYPE_BYTE_GRAY);
+
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrHist = histogramImg.getRaster();
+        
+        //Gray resolution of image -- hardcoded to 256 (2^8) here
+        int grayResolution = 256;
+        //2^8 array for histogram of grayscale values
+        int[] histogram = new int[grayResolution];
+        
+        //Iterate through every pixel in the image.
+        for(int i=0;i<src.getWidth();i++){
+            for(int j=0;j<src.getHeight();j++){
+                //Get the grayscale value of the current pixel
+                int pixelValue = wrSrc.getSample(i, j, 0);
+                //We found another pixel of this value, increase our histogram array by 1 for that gray level!
+                histogram[pixelValue] = histogram[pixelValue]+1;
+            }
+        }
+        
+        int maxNumPixels = 0;
+        //Find the maximum histogram value
+        for(int i=0; i < histogram.length;i++)
+            maxNumPixels = Math.max(maxNumPixels, histogram[i]);
+        
+        //System.out.println("MAX PIXELS: "+maxNumPixels);
+        //The amount of pixel width to draw per gray resolution level
+        int pixelDrawWidth = histogramWidth/256;
+        //Scale factor so that max pixels can be the largest part of the histogram.
+        float scaleFactor = (float)maxNumPixels/histogramHeight;
+        for(int i=0; i < histogram.length;i++)
+        {
+            System.out.println("histogram["+i+"]=="+histogram[i]);
+            int drawHeight = (int)Math.floor((float)histogram[i]/scaleFactor);
+            for(int j=histogramHeight;j>histogramHeight-drawHeight;j--)
+            {
+                for(int x=i*pixelDrawWidth;x <=(i*pixelDrawWidth)+pixelDrawWidth;x++)
+                {
+                    wrHist.setSample(x, j, 0, 255);
+                }
+            }
+        }
+        histogramImg.setData(wrHist);
+        return histogramImg;
+    }
+    
+    public static BufferedImage localHistogramEqualization(BufferedImage src,int filterX,int filterY,String paddingType)
     {   
         BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
         WritableRaster wrSrc = src.getRaster();
         WritableRaster wrDst = dst.getRaster();
         
-        //The size that would normally be padded to do point image processing
-        int xIgnore = filterX/2;
-        int yIgnore = filterY/2;
+        //Empty declarations here to be determined based on padding style chosen.
+        BufferedImage padImg;
+        WritableRaster padRaster;
+
+        //Half of the filter size x&y which must be padded or skipped depending on paddingType
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 or no padding (IE skipping the edge pixels)
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else //Skip edge pixels, don't do padding to make them processable.
+        {
+            //Copy all pixels to destination image buffer (since we skip edge pixels, we need them)
+            for(int i=0;i<src.getWidth();i++)
+                for(int j=0;j<src.getHeight();j++)
+                    wrDst.setSample(i, j, 0, wrSrc.getSample(i, j, 0));
+            padImg = src;
+            padRaster = padImg.getRaster();
+        }
+
         //Gray resolution of image -- hardcoded to 256 (2^8) here
         int grayResolution = 256;
-        //Iterate through every pixel in the image except for the edge pixels--For performance gains, instead of padding, we simply skip working on the edge pixels entirely!
-        //KEY POINT: NO PADDING IS DONE-WE SKIP DOING WORK ON THE EDGE PIXELS FOR PERFORMANCE GAINS
-        for(int i=xIgnore;i<src.getWidth()-xIgnore;i++){
-            for(int j=yIgnore;j<src.getHeight()-yIgnore;j++){
+        //Iterate through every pixel in the image differently depending on the padding type
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++){
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
                 //2^8 array for histogram of grayscale values
                 int[] histogram = new int[grayResolution];
                 //2^8 array for CDF of histogram values
@@ -234,11 +361,11 @@ public class ImageLibrary {
                 //2^8 array for mapping of equalized histogram values
                 int[] mappedHistogramValues = new int[grayResolution];
                 //Do local histogram equalization 
-                for(int x = -xIgnore; x < filterX-xIgnore; x++)
-                    for(int y = -yIgnore; y < filterY-yIgnore; y++)
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++)
                     {
                         //Get the grayscale value of the current pixel
-                        int pixelValue = wrSrc.getSample(i+x, j+y, 0);
+                        int pixelValue = padRaster.getSample(i+x, j+y, 0);
                         //We found another pixel of this value, increase our histogram array by 1 for that gray level!
                         histogram[pixelValue] = histogram[pixelValue]+1;                        
                     }
@@ -255,15 +382,188 @@ public class ImageLibrary {
                     //Calculate the mapped histogram equalized value for the pixel
                     mappedHistogramValues[x] = Math.min(Math.round((float)cdf[x]/totalPixels*grayResolution), 255);
                 }
-                //Loop through all pixels and equalize the histogram values using the calculated mapping array.
-                for(int x = -xIgnore; x < filterX-xIgnore; x++)
-                    for(int y = -yIgnore; y < filterY-yIgnore; y++)
-                    {
-                        //Set the destination image with the values of the mapped histogram equalized values.
-                        wrDst.setSample(i+x, j+y, 0, mappedHistogramValues[wrSrc.getSample(i+x, j+y, 0)]);
-                    }
+                //Equalize the histogram value in the final transformed image using the calculated mapping array.
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, mappedHistogramValues[padRaster.getSample(i,j,0)]);
+                else//Skipping edge pixels so there is no padding
+                    wrDst.setSample(i, j, 0, mappedHistogramValues[padRaster.getSample(i,j,0)]);
             }
         }
+        dst.setData(wrDst);
+        return dst;
+    }
+    public static BufferedImage medianFilter(BufferedImage src,int filterX,int filterY,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                ArrayList<Integer> pixelValuesInFilter = new ArrayList<Integer>();
+                //Loop through filter.
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        pixelValuesInFilter.add(padRaster.getSample(i+x, y+j, 0));
+                    }
+                pixelValuesInFilter.sort(null);
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, pixelValuesInFilter.get(pixelValuesInFilter.size()/2));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+
+    //Convolve a given filter with a src image and output the result ot the destination image. (Note, src image should already be padded if convolving on edge pixels!)
+    public static void convolvePixel(WritableRaster src, WritableRaster dst, int[][] filter,int srcX,int srcY, int dstX, int dstY)
+    {
+        int w = getFilterW(filter);
+        //Only odd sized filters are supported (EG: 3x3,3x5)
+        int filterX = filter[0].length;
+        int filterY = filter.length;
+        int centerX = filterX/2;
+        int centerY = filterY/2;
+        int convolutionResult = 0;
+        for(int i=-centerX; i<centerX;i++)
+            for(int j=-centerY; j<centerY;j++)
+            {
+                convolutionResult = (src.getSample(i, j, 0)*filter[i+centerX][j+centerY])+convolutionResult;
+            }
+        convolutionResult = (int)Math.round(((double)1/w) * convolutionResult); 
+        dst.setSample(dstX, dstY, 0, convolutionResult);
+    }
+    
+    public static BufferedImage smoothingFilter(BufferedImage src,int[][] filter,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        /*
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        int [][] smoothingFilter = smoothingAverageFilter1();
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                
+                //Loop through filter.
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        //Calculate Filter Effect
+                    }
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, padRaster.getSample(i,j,0));
+            }
+        
+        */
+        dst.setData(wrDst);
+        return dst;
+    }
+    
+    public static BufferedImage sharpeningLaplacianFilter(BufferedImage src,int filterX,int filterY,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                
+                //Loop through filter.
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        //Calculate Filter Effect
+                    }
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, padRaster.getSample(i,j,0));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+    
+    public static BufferedImage highBoostFilter(BufferedImage src,int filterX,int filterY,float highBoostK,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                
+                //Loop through filter.
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        //Calculate Filter Effect
+                    }
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, padRaster.getSample(i,j,0));
+            }
+        
         dst.setData(wrDst);
         return dst;
     }
@@ -289,6 +589,38 @@ public class ImageLibrary {
  
         return dst;
     }
+    
+    public static BufferedImage selectBitplanes(BufferedImage src,boolean bit8, boolean bit7, boolean bit6, boolean bit5, boolean bit4, boolean bit3, boolean bit2, boolean bit1)
+    {
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Calculate the bitplane value
+        int bitmask = 0;
+        
+        if (bit8) bitmask += 128;
+        if (bit7) bitmask += 64;
+        if (bit6) bitmask += 32;
+        if (bit5) bitmask += 16;
+        if (bit4) bitmask += 8;
+        if (bit3) bitmask += 4;
+        if (bit2) bitmask += 2;
+        if (bit1) bitmask += 1;
+
+        //We don't do pixel shift in this method since we want to see what actually happens to the values.
+        //To see a bitplane more clearly, use the selectBitplane function.
+
+        for(int i=0;i<src.getWidth();i++){
+            for(int j=0;j<src.getHeight();j++){
+                // bitwise and the bitmask with the src pixel.
+                wrDst.setSample(i, j, 0, (wrSrc.getSample(i, j, 0) & bitmask));
+            }
+        }
+        dst.setData(wrDst);
+ 
+        return dst;
+    }    
     
     /*
     *   Change the bitdepth of an image.
@@ -341,6 +673,35 @@ public class ImageLibrary {
         }
         return success;
 
+    }
+    
+    public static int[][] smoothingAverageFilter1()
+    {
+        int[][] filter={ {1,1,1}, {1,1,1}, {1,1,1} };
+        return filter;
+    }
+    public static int[][] smoothingAverageFilter2()
+    {
+        int[][] filter={ {1,2,1}, {2,4,2}, {1,2,1} };
+        return filter;
+    }
+    public static int[][] sharpeningLaplacianFilter1()
+    {
+        int[][] filter={ {0,1,0}, {1,-4,1}, {0,1,0} };
+        return filter;
+    }
+    public static int[][] sharpeningLaplacianFilter2()
+    {
+        int[][] filter={ {1,1,1}, {1,-8,1}, {1,1,1} };
+        return filter;
+    }
+    public static int getFilterW(int[][] filter)
+    {
+        int w = 0;
+        for(int i=0; i<filter.length;i++)
+            for(int j=0;j<filter[0].length;j++)
+                w += filter[i][j];
+        return w;
     }
     
     /**

@@ -1074,7 +1074,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         
         switch(spatialFilterMethodChoice.getSelectedItem()){
             case "Smoothing Filter":
-                rightImage = ImageLibrary.convolveImage(leftImage,ImageLibrary.smoothingAverageFilter1(),paddingType);
+                rightImage = ImageLibrary.convolveImage(leftImage,ImageLibrary.generate2DSmoothingFilter1(Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText())),paddingType);
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             case "Median Filter":
@@ -1082,11 +1082,12 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             case "Sharpening Laplacian Filter":
-                rightImage = ImageLibrary.convolveImage(leftImage,ImageLibrary.sharpeningLaplacianFilter1(),paddingType);
+                rightImage = ImageLibrary.sharpenImage(leftImage,ImageLibrary.generate2DLaPlacianFilter2(Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText())),paddingType);
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             case "High-Boosting Filter":
-                rightImage = ImageLibrary.highBoostFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),Float.parseFloat(spatialFilteringScalar.getText()),paddingType);
+                //rightImage = ImageLibrary.highBoostFilter(leftImage,ImageLibrary.gaussian5x5Filter(),Float.parseFloat(spatialFilteringScalar.getText()),paddingType);
+                rightImage = ImageLibrary.highBoostFilter(leftImage,ImageLibrary.generate2DSmoothingFilter1(Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText())),Float.parseFloat(spatialFilteringScalar.getText()),paddingType);
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             default:

@@ -437,8 +437,8 @@ public class ImageLibrary {
     {
         int w = getFilterW(filter);
         //Only odd sized filters are supported (EG: 3x3,3x5)
-        int filterX = filter[0].length;
-        int filterY = filter.length;
+        int filterX = filter.length;
+        int filterY = filter[0].length;
         int centerX = filterX/2;
         int centerY = filterY/2;
         int convolutionResult = 0;
@@ -479,57 +479,156 @@ public class ImageLibrary {
                 minPixelValue = Math.min(minPixelValue, unscaledOutput[i-xPad][j-yPad]);
             }
         minPixelValue = Math.abs(minPixelValue);
-        //System.out.println("MinPixelValue+")
-        
-        //System.out.println("MAX_PIXEL_VALUE:"+maxPixelValue);
-        //System.out.println("MIN_PIXEL_VALUE:"+minPixelValue);
         
         //Scale the values in the image!
         for(int i=0; i<wrDst.getWidth();i++)
             for(int j=0;j<wrDst.getHeight();j++){
                 //Scale the pixel value to be within 0-255!
                 int scaledValue = Math.round((((float)unscaledOutput[i][j]+minPixelValue)/(maxPixelValue+minPixelValue))*255);
-                //System.out.println("MAX_MINS:"+scaledValue);
                 wrDst.setSample(i, j, 0, scaledValue);
             }
         dst.setData(wrDst);
         return dst;
     }
-    
-    public static BufferedImage highBoostFilter(BufferedImage src,int filterX,int filterY,float highBoostK,String paddingType)
+
+
+    public static BufferedImage sharpenImage(BufferedImage src,int[][] filter,String paddingType)
     {  
         BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
         WritableRaster wrSrc = src.getRaster();
         WritableRaster wrDst = dst.getRaster();
         
-        //Initialize Pad-relevant variables
-        BufferedImage padImg;
-        WritableRaster padRaster;
+        //Image array to hold the convolved, unscaled values
+        int [][] unscaledOutput = new int[src.getWidth()][src.getHeight()];
+        int [][] sourceImageArray = get2DImageArray(wrSrc);
+        int[][] scaledSourceImage = scaleImageArray(sourceImageArray);
+        int filterX = filter.length;
+        int filterY = filter[0].length;
         int xPad = filterX/2;
         int yPad = filterY/2;
         
-        //Do the setup for different padding types.
-        //Currently only support 0 padding
-        if (paddingType=="zero"){
-            //Create a new padded image buffer which accounts for the necessary padding.
-            padImg = zeroPadImage(src,filterX,filterY);
-            padRaster = padImg.getRaster();
-        }
-        else {
-            return src; //No other padding types are supported currently!
-        }
+        //Initialize Pad-relevant variables
+        BufferedImage padImg = zeroPadImage(src,filterX,filterY);
+        WritableRaster padRaster = padImg.getRaster();
         
+        int maxPixelValue = 0;
+        int minPixelValue = 255;
         for(int i=xPad;i<padImg.getWidth()-xPad;i++)
             for(int j=yPad;j<padImg.getHeight()-yPad;j++){
-                
-                //Loop through filter.
-                for(int x = -xPad; x < xPad+1; x++)
-                    for(int y = -yPad; y < yPad+1; y++){
-                        //Calculate Filter Effect
-                    }
-                if(paddingType=="zero")
-                    wrDst.setSample(i-xPad, j-yPad, 0, padRaster.getSample(i,j,0));
+                convolvePixel(padRaster,unscaledOutput,filter,i,j,i-xPad,j-yPad);
             }
+        
+        int[][] scaledLaplacianArray = scaleImageArray(unscaledOutput);
+        int[][] sharpenedImage = subtract2DArray(scaledSourceImage, scaledLaplacianArray);
+        int[][] sharpenedScaledImage = scaleImageArray(sharpenedImage);
+        setWritableRasterTo2DImageArray(sharpenedScaledImage,wrDst);
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+    
+    //Simple function to scale an image array
+    public static int[][] scaleImageArray(int[][] imageArray)
+    {
+        int[][] scaledArray = new int[imageArray.length][imageArray[0].length];
+        //Get the minimum and maximum values from the image array
+        int minValue=512;
+        int maxValue=-512;
+        for(int i=0; i<imageArray.length;i++)
+            for(int j=0; j<imageArray[0].length;j++){
+                minValue = Math.min(minValue, imageArray[i][j]);
+                maxValue = Math.max(maxValue,imageArray[i][j]);
+            }
+        minValue = Math.abs(minValue);
+        for(int i=0; i<imageArray.length;i++)
+            for(int j=0; j<imageArray[0].length;j++){
+                scaledArray[i][j] = Math.round((((float)imageArray[i][j]+minValue)/(maxValue+minValue))*255);
+            }
+        return scaledArray;
+    }
+
+    //Simple function to subtract 2 image arrays
+    public static int[][] subtract2DArray(int [][] a,int [][] b)
+    {
+        int[][] dest  = new int[a.length][a[0].length];
+        for(int i=0; i<a.length;i++)
+            for(int j=0; j<a[0].length;j++){
+                dest[i][j] = a[i][j] - b[i][j];
+            }
+        return dest;
+    }
+    
+    //Simple function to subtract 2 image arrays
+    public static int[][] scalarMultiply2DArray(int [][] a,float scalar)
+    {
+        int[][] dest  = new int[a.length][a[0].length];
+        for(int i=0; i<a.length;i++)
+            for(int j=0; j<a[0].length;j++){
+                dest[i][j] = Math.round(scalar*a[i][j]);
+            }
+        return dest;
+    }
+    
+    //Simple function to add 2 image arrays
+    public static int[][] add2DArray(int [][] a,int [][] b)
+    {
+        int[][] dest  = new int[a.length][a[0].length];
+        for(int i=0; i<a.length;i++)
+            for(int j=0; j<a[0].length;j++){
+                dest[i][j] = a[i][j] + b[i][j];
+            }
+        return dest;
+    }
+    //Simple function to get a 2d Image array from a writableRaster
+    public static int[][] get2DImageArray(WritableRaster wr)
+    {
+        int[][] imageArray = new int[wr.getWidth()][wr.getHeight()];
+        for(int i=0; i<imageArray.length;i++)
+            for(int j=0; j<imageArray[0].length;j++){
+                imageArray[i][j] = wr.getSample(i, j, 0);
+            }
+        return imageArray;
+    }
+    
+    public static void setWritableRasterTo2DImageArray(int[][]imageArray,WritableRaster wrDst)
+    {
+        for(int i=0; i<imageArray.length;i++)
+            for(int j=0; j<imageArray[0].length;j++){
+                wrDst.setSample(i, j, 0, imageArray[i][j]);
+            }   
+    }
+    
+    public static BufferedImage highBoostFilter(BufferedImage src,int[][] filter, float highBoostK,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Image array to hold the convolved, unscaled values
+        int [][] blurredOutput = new int[src.getWidth()][src.getHeight()];
+        int [][] sourceImageArray = get2DImageArray(wrSrc);
+        int filterX = filter.length;
+        int filterY = filter[0].length;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg = zeroPadImage(src,filterX,filterY);
+        WritableRaster padRaster = padImg.getRaster();
+        
+        int maxPixelValue = 0;
+        int minPixelValue = 255;
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                convolvePixel(padRaster,blurredOutput,filter,i,j,i-xPad,j-yPad);
+            }
+        
+        //int[][] scaledLaplacianArray = scaleImageArray(unscaledOutput);
+        int[][] unsharpMask = subtract2DArray(sourceImageArray,blurredOutput);
+        int[][] weightedUnsharpMask = scalarMultiply2DArray(unsharpMask,highBoostK);
+        int[][] imageWithSharpenedMask = add2DArray(sourceImageArray, weightedUnsharpMask);
+        int[][] scaledSharpenedImage = scaleImageArray(imageWithSharpenedMask);
+        setWritableRasterTo2DImageArray(scaledSharpenedImage,wrDst);
         
         dst.setData(wrDst);
         return dst;
@@ -642,24 +741,38 @@ public class ImageLibrary {
 
     }
     
-    public static int[][] smoothingAverageFilter1()
+    public static int[][] generate2DSmoothingFilter1(int filterX, int filterY)
     {
-        int[][] filter={ {1,1,1}, {1,1,1}, {1,1,1} };
+        //Forcing odd-sized filters!
+        if(filterX%2==0){
+            filterX +=1;
+            System.out.println("Forcing Odd Size Filter X:" + filterX);
+        }
+        if(filterY%2==0){
+            filterY +=1;
+            System.out.println("Forcing Odd Size Filter Y:" + filterY);
+        }
+            
+        int[][] filter = new int [filterX][filterY];
+        for(int i=0;i<filterX;i++)
+            for(int j=0;j<filterY;j++)
+                filter[i][j]=1;
         return filter;
     }
-    public static int[][] smoothingAverageFilter2()
+    
+    public static int[][] generate2DLaPlacianFilter2(int filterX, int filterY)
     {
-        int[][] filter={ {1,2,1}, {2,4,2}, {1,2,1} };
+        int[][] filter = generate2DSmoothingFilter1(filterX,filterY);
+
+        //n2-1 with support for differently sized filters
+        filter[filter.length/2][filter[0].length/2] = -1*((filter.length * filter[0].length) - 1);
+
         return filter;
     }
-    public static int[][] sharpeningLaplacianFilter1()
+    
+    public static int[][] gaussian5x5Filter()
     {
-        int[][] filter={ {0,1,0}, {1,-4,1}, {0,1,0} };
-        return filter;
-    }
-    public static int[][] sharpeningLaplacianFilter2()
-    {
-        int[][] filter={ {1,1,1}, {1,-8,1}, {1,1,1} };
+        int[][] filter={ {1,4,7,4,1}, {4,16,26,16,4}, {7,26,41,26,7}, {4,16,26,16,4}, {1,4,7,4,1} };
         return filter;
     }
     public static int getFilterW(int[][] filter)
@@ -681,6 +794,9 @@ public class ImageLibrary {
         //Copy the demo lena image into the images directory for convenience
         try{
             copy(ImageLibrary.class.getResourceAsStream("lena.gif"),java.nio.file.Paths.get(".").toAbsolutePath().normalize().toString()+java.io.File.separator+"images"+java.io.File.separator+"lena.gif");
+            copy(ImageLibrary.class.getResourceAsStream("wdg4.gif"),java.nio.file.Paths.get(".").toAbsolutePath().normalize().toString()+java.io.File.separator+"images"+java.io.File.separator+"wdg4.gif");
+            copy(ImageLibrary.class.getResourceAsStream("blurry_fce2.gif"),java.nio.file.Paths.get(".").toAbsolutePath().normalize().toString()+java.io.File.separator+"images"+java.io.File.separator+"blurry_fce2.gif");
+            copy(ImageLibrary.class.getResourceAsStream("800px-Unequalized_Hawkes_Bay_NZ.jpg"),java.nio.file.Paths.get(".").toAbsolutePath().normalize().toString()+java.io.File.separator+"images"+java.io.File.separator+"800px-Unequalized_Hawkes_Bay_NZ.jpg");
             
         }
         catch(Exception e)

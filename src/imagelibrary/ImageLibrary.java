@@ -432,6 +432,333 @@ public class ImageLibrary {
         return dst;
     }
 
+    public static BufferedImage maxFilter(BufferedImage src,int filterX,int filterY,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                ArrayList<Integer> pixelValuesInFilter = new ArrayList<Integer>();
+                //Loop through filter.
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        pixelValuesInFilter.add(padRaster.getSample(i+x, y+j, 0));
+                    }
+                pixelValuesInFilter.sort(null);
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, pixelValuesInFilter.get(pixelValuesInFilter.size()-1));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+
+    public static BufferedImage minFilter(BufferedImage src,int filterX,int filterY,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                ArrayList<Integer> pixelValuesInFilter = new ArrayList<Integer>();
+                //Loop through filter.
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        pixelValuesInFilter.add(padRaster.getSample(i+x, y+j, 0));
+                    }
+                pixelValuesInFilter.sort(null);
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, pixelValuesInFilter.get(0));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+
+    public static BufferedImage midpointFilter(BufferedImage src,int filterX,int filterY,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                ArrayList<Integer> pixelValuesInFilter = new ArrayList<Integer>();
+                //Loop through filter.
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        pixelValuesInFilter.add(padRaster.getSample(i+x, y+j, 0));
+                    }
+                pixelValuesInFilter.sort(null);
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, Math.round((float)1/2 * (pixelValuesInFilter.get(0) + pixelValuesInFilter.get(pixelValuesInFilter.size()-1))));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+
+    public static BufferedImage alphaTrimmedMeanFilter(BufferedImage src,int filterX,int filterY,int d, String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        if(d%2==1) //Odd d's don't work, force it to be even!
+            d += 1;
+        
+        int dHalf = d/2;
+        int filterSize = filterX * filterY;        
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                ArrayList<Integer> pixelValuesInFilter = new ArrayList<Integer>();
+                //Loop through filter.
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        pixelValuesInFilter.add(padRaster.getSample(i+x, y+j, 0));
+                    }
+                pixelValuesInFilter.sort(null);
+                int summedAlphaTrimmedPixelValues = 0;
+                for(int x=dHalf; x< pixelValuesInFilter.size()-dHalf;x++)
+                    summedAlphaTrimmedPixelValues += pixelValuesInFilter.get(x);
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, Math.round((float)1/(filterSize-d) * summedAlphaTrimmedPixelValues));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+    
+    public static BufferedImage arithmeticMeanFilter(BufferedImage src,int filterX,int filterY,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        int filterSize = filterX * filterY;
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                int pixelSubimageSum = 0;
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        pixelSubimageSum += padRaster.getSample(i+x, y+j, 0);
+                    }
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, Math.round((float)pixelSubimageSum/filterSize));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+    
+    public static BufferedImage geometricMeanFilter(BufferedImage src,int filterX,int filterY,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        int filterSize = filterX * filterY;
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                double pixelSubimageProduct = 1;
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        pixelSubimageProduct *= padRaster.getSample(i+x, y+j, 0);
+                    }
+                        
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, (int)Math.round(Math.pow(pixelSubimageProduct,(double)1/filterSize)));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+
+    public static BufferedImage harmonicMeanFilter(BufferedImage src,int filterX,int filterY,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        int filterSize = filterX * filterY;
+        
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                double pixelSubimageSum = 0;
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        pixelSubimageSum += (double)1/padRaster.getSample(i+x, y+j, 0);
+                    }
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, Math.round((float)filterSize/pixelSubimageSum));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+
+    public static BufferedImage contraharmonicMeanFilter(BufferedImage src,int filterX,int filterY,double filterOrder,String paddingType)
+    {  
+        BufferedImage dst = new BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        WritableRaster wrSrc = src.getRaster();
+        WritableRaster wrDst = dst.getRaster();
+        
+        //Initialize Pad-relevant variables
+        BufferedImage padImg;
+        WritableRaster padRaster;
+        int xPad = filterX/2;
+        int yPad = filterY/2;
+        
+        //Do the setup for different padding types.
+        //Currently only support 0 padding
+        if (paddingType=="zero"){
+            //Create a new padded image buffer which accounts for the necessary padding.
+            padImg = zeroPadImage(src,filterX,filterY);
+            padRaster = padImg.getRaster();
+        }
+        else {
+            return src; //No other padding types are supported currently!
+        }
+        
+        for(int i=xPad;i<padImg.getWidth()-xPad;i++)
+            for(int j=yPad;j<padImg.getHeight()-yPad;j++){
+                double highOrderSum = 0;
+                double normalOrderSum = 0;
+                for(int x = -xPad; x < xPad+1; x++)
+                    for(int y = -yPad; y < yPad+1; y++){
+                        highOrderSum += Math.pow((double)padRaster.getSample(i+x, y+j, 0), filterOrder+1);
+                        normalOrderSum += Math.pow((double)padRaster.getSample(i+x, y+j, 0), filterOrder);
+                    }
+                if(paddingType=="zero")
+                    wrDst.setSample(i-xPad, j-yPad, 0, (int)Math.round(highOrderSum/normalOrderSum));
+            }
+        
+        dst.setData(wrDst);
+        return dst;
+    }
+    
     //Convolve a given filter with a src image pixel and output the result ot the destination image. (Note, src image should already be padded if convolving on edge pixels!)
     public static void convolvePixel(WritableRaster src, int[][] unscaledOutput, int[][] filter,int srcX,int srcY, int dstX, int dstY)
     {

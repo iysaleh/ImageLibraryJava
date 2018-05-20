@@ -221,7 +221,6 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        selectBitplaneChooser.setMaximumSize(new java.awt.Dimension(450, 200));
         selectBitplaneChooser.setMinimumSize(new java.awt.Dimension(450, 200));
 
         selectBitplaneAcceptButton.setText("Accept");
@@ -288,7 +287,6 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        changePixelDepthChooser.setMaximumSize(new java.awt.Dimension(450, 200));
         changePixelDepthChooser.setMinimumSize(new java.awt.Dimension(450, 200));
 
         changePixelDepthAcceptButton.setText("Accept");
@@ -497,7 +495,15 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         spatialFilterMethodChoice.add("Median Filter");
         spatialFilterMethodChoice.add("Sharpening Laplacian Filter");
         spatialFilterMethodChoice.add("High-Boosting Filter");
-        spatialFilterMethodChoice.select("Median Filter");
+        spatialFilterMethodChoice.add("Arithmetic Mean Filter");
+        spatialFilterMethodChoice.add("Geometric Mean Filter");
+        spatialFilterMethodChoice.add("Harmonic Mean Filter");
+        spatialFilterMethodChoice.add("Contraharmonic Mean Filter");
+        spatialFilterMethodChoice.add("Max Filter");
+        spatialFilterMethodChoice.add("Min Filter");
+        spatialFilterMethodChoice.add("Midpoint Filter");
+        spatialFilterMethodChoice.add("Alpha-Trimmed Mean Filter");
+        spatialFilterMethodChoice.select("Arithmetic Mean Filter");
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel14.setText("Select Filter Type:");
@@ -535,7 +541,7 @@ public class ImageLibraryUI extends javax.swing.JFrame {
         jLabel17.setText("x");
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel18.setText("Filter Scalar (High-Boosting Filter Only):");
+        jLabel18.setText("Filter Scalar (HB, CHM & ATM Filter Only):");
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel19.setText("Select Edge Pixel Handling Method:");
@@ -562,19 +568,9 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
-                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spatialFilteringEdgePixelChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spatialFilteringScalar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
                         .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
-                                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(27, 27, 27))
                             .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
                                 .addComponent(jLabel15)
@@ -587,40 +583,52 @@ public class ImageLibraryUI extends javax.swing.JFrame {
                                 .addComponent(jLabel17)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(spatialFilterY, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(57, 57, 57))
+                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                        .addComponent(jLabel18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(spatialFilteringScalar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(226, 226, 226))
+                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(spatialFilteringEdgePixelChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(57, 57, 57))))
         );
         spatialFilteringChooserLayout.setVerticalGroup(
             spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
-                .addContainerGap(62, Short.MAX_VALUE)
-                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spatialFilterMethodChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(spatialFilterX, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel15)
-                        .addComponent(spatialFilterY, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel17))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel18)
-                    .addComponent(spatialFilteringScalar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spatialFilteringEdgePixelChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                        .addContainerGap(46, Short.MAX_VALUE)
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spatialFilterMethodChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(spatialFilterX, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel15)
+                                .addComponent(spatialFilterY, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel17))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel18)
+                            .addComponent(spatialFilteringScalar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel19))
+                    .addGroup(spatialFilteringChooserLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(spatialFilteringEdgePixelChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(13, 13, 13)
                 .addGroup(spatialFilteringChooserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(spatialFilteringAcceptButton)
                     .addComponent(spatialFilteringCancelButton))
                 .addContainerGap())
         );
 
-        selectBitplanesChooser.setMaximumSize(new java.awt.Dimension(450, 200));
         selectBitplanesChooser.setMinimumSize(new java.awt.Dimension(450, 200));
 
         selectBitplanesAcceptButton.setText("Accept");
@@ -1088,6 +1096,39 @@ public class ImageLibraryUI extends javax.swing.JFrame {
             case "High-Boosting Filter":
                 //rightImage = ImageLibrary.highBoostFilter(leftImage,ImageLibrary.gaussian5x5Filter(),Float.parseFloat(spatialFilteringScalar.getText()),paddingType);
                 rightImage = ImageLibrary.highBoostFilter(leftImage,ImageLibrary.generate2DSmoothingFilter1(Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText())),Float.parseFloat(spatialFilteringScalar.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Arithmetic Mean Filter":
+                rightImage = ImageLibrary.arithmeticMeanFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Geometric Mean Filter":
+                rightImage = ImageLibrary.geometricMeanFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Harmonic Mean Filter":
+                rightImage = ImageLibrary.harmonicMeanFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Contraharmonic Mean Filter":
+                rightImage = ImageLibrary.contraharmonicMeanFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),Double.parseDouble(spatialFilteringScalar.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Max Filter":
+                rightImage = ImageLibrary.maxFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Min Filter":
+                rightImage = ImageLibrary.minFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Midpoint Filter":
+                rightImage = ImageLibrary.midpointFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),paddingType);
+                rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
+                break;
+            case "Alpha-Trimmed Mean Filter":
+                int d = (int)Math.round(Double.parseDouble(spatialFilteringScalar.getText())); //Regardless of the value the user specifies, round it to the nearest integer!
+                rightImage = ImageLibrary.alphaTrimmedMeanFilter(leftImage,Integer.parseInt(spatialFilterX.getText()),Integer.parseInt(spatialFilterY.getText()),d,paddingType);
                 rightImageLabel.setIcon(new javax.swing.ImageIcon(rightImage));
                 break;
             default:
